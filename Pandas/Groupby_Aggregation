@@ -1,0 +1,1 @@
+session_table.groupby(by=['user_session','user_id']).agg(session_beginning=('session_beginning',min))
