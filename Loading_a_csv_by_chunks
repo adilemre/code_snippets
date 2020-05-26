@@ -1,0 +1,53 @@
+#reading the files and creating the session summary table
+file_locs=["/kaggle/input/ecommerce-behavior-data-from-multi-category-store/2019-Nov.csv","/kaggle/input/ecommerce-behavior-data-from-multi-category-store/2019-Oct.csv"]
+
+session_table=pd.DataFrame()
+
+for file_loc in file_locs:
+    dataset=pd.read_csv(file_loc,chunksize=1000)#,nrows=10000)
+    for piece_of_data in dataset:
+        piece_of_data['event_time']=pd.to_datetime(piece_of_data['event_time']).dt.tz_convert(None)
+        piece_of_data=pd.get_dummies(data=piece_of_data,columns=['event_type'])
+        piece_of_data['purchased_amount']=piece_of_data['event_type_purchase']*piece_of_data['price']
+        session_table_temp=piece_of_data.groupby(by=['user_session','user_id']).agg(session_beginning=('event_time',min),
+                                                                                    session_end=('event_time',max),
+                                                                                    number_of_pages=('event_time','count'),
+                                                                                    #number_of_products=('product_id',lambda x: x.nunique()),
+                                                                                    #number_of_categories=('category_id',lambda x: x.nunique()),
+                                                                                    #number_of_brands=('brand',lambda x: x.nunique()),
+                                                                                    added_item=('event_type_cart',sum),
+                                                                                    purchased_item=('event_type_purchase',sum),
+                                                                                    purchased_amount=('purchased_amount',sum),
+                                                                                    viewed_item=('event_type_view',sum)
+                                                                                    )                             
+        del piece_of_data                              
+        session_table_temp['session_duration']=session_table_temp['session_end']-session_table_temp['session_beginning']
+        session_table_temp.reset_index(inplace=True)
+        session_table=pd.concat([session_table,session_table_temp])
+        del session_table_temp
+        session_table=session_table.groupby(by=['user_session','user_id']).agg(session_beginning=('session_beginning',min),
+                                                                                session_end=('session_end',max),
+                                                                                number_of_pages=('number_of_pages','sum'),
+                                                                                #number_of_products=('number_of_products','sum'),
+                                                                                #number_of_categories=('category_id',lambda x: x.nunique()),
+                                                                                #number_of_brands=('brand',lambda x: x.nunique()),
+                                                                                added_item=('added_item',sum),
+                                                                                purchased_item=('purchased_item',sum),
+                                                                                purchased_amount=('purchased_amount',sum),
+                                                                                viewed_item=('viewed_item',sum)
+                                                                                )  
+        session_table.reset_index(inplace=True)
+session_table=session_table.groupby(by=['user_session','user_id']).agg(session_beginning=('session_beginning',min),
+                                                                        session_end=('session_end',max),
+                                                                        number_of_pages=('number_of_pages','sum'),
+                                                                        #number_of_products=('number_of_products','sum'),
+                                                                        #number_of_categories=('category_id',lambda x: x.nunique()),
+                                                                        #number_of_brands=('brand',lambda x: x.nunique()),
+                                                                        added_item=('added_item',sum),
+                                                                        purchased_item=('purchased_item',sum),
+                                                                        purchased_amount=('purchased_amount',sum),
+                                                                        viewed_item=('viewed_item',sum)
+                                                                        )  
+session_table.reset_index(inplace=True)
+session_table['session_duration']=session_table['session_end']-session_table['session_beginning']
+session_table.drop(columns=['session_end'],inplace=True)
