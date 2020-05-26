@@ -1,0 +1,1 @@
+piece_of_data['event_time']=pd.to_datetime(piece_of_data['event_time']).dt.tz_convert(None)
