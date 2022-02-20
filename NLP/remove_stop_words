@@ -1,0 +1,10 @@
+def remove_stop_words(input_df,input_col):
+    #this function removes stopwords from a text in a dataframe column.
+    import spacy
+    nlp=spacy.load('en_core_web_lg')
+    def remove_stop_words_from_text(input_text):
+        doc = nlp(input_text)
+        words = [token.text for token in doc if not token.is_stop]
+        output_text= ' '.join(words)
+        return output_text
+    input_df[input_col]=input_df[input_col].apply(remove_stop_words_from_text)
