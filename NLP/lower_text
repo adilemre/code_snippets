@@ -1,0 +1,8 @@
+def convert_to_lower_case(input_df,input_col):
+    #this function converts text in a dataframe column
+    def lower(input_text):
+        try:
+            return input_text.lower()
+        except:
+            return input_text
+    input_df[input_col]=input_df[input_col].apply(lower)
