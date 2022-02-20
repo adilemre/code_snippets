@@ -1,0 +1,11 @@
+def correct_words(input_df,input_col):
+    #this function corrects text in a dataframe column and replace it with the corrected text
+    from textblob import TextBlob
+    def correct_text(input_text):
+        try:
+            list_1=[str(TextBlob(word).correct()) for word in input_text.split()]
+            output_text= ' '.join(list_1)
+            return output_text
+        except:
+            return input_text
+    input_df[input_col]=input_df[input_col].apply(correct_text)
