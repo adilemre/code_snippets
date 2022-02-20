@@ -1,0 +1,10 @@
+def find_words_start_with_this(input_text,input_character):
+    #this function finds hashtags in a text and returns hashtag key words as a text
+    try:
+        output_list=[]
+        output_list=[hashtag.replace(input_character,'') for hashtag in input_text.split() if hashtag.startswith(input_character)]
+        output_list=list(set(output_list))
+        output_text= ' '.join(output_list)
+        return output_text
+    except:
+        return None  
