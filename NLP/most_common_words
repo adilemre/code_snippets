@@ -1,0 +1,8 @@
+def most_common_words(input_df,input_col,n):
+    #this function finds the most common words in text in a dataframe column
+    from collections import Counter
+    bag_of_words=[]
+    for tweet in input_df[input_col].tolist():
+        bag_of_words.extend(tweet.split())
+    word_freq_dict = Counter(bag_of_words)
+    return word_freq_dict.most_common(n)
