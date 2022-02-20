@@ -1,0 +1,11 @@
+def remove_words_with_character_from_text(input_text,input_character):
+    #this function removes the word starts with a specia character
+    import spacy
+    nlp=spacy.load('en_core_web_lg')
+    try:
+        input_text=input_text.replace(str(input_character+' '),input_character)
+        output_list=[word for word in input_text.split() if not word.startswith(input_character)]
+        output_text=' '.join(output_list)
+        return output_text
+    except:
+        return input_text 
