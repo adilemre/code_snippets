@@ -1,0 +1,23 @@
+def create_wordcloud(input_df,input_col):
+    #this function creates a word cloud from a text from a dataframe column
+    from wordcloud import WordCloud
+    def convert_to_single_text():
+        text_list=input_df[input_col].to_list()
+        text_list=[text.split() for text in text_list]
+        word_list=[]
+        for i in text_list:
+            word_list.extend(i)
+        output_text=' '.join(word_list)
+        return  output_text
+    def wordcloud(input_text):
+        wc=WordCloud(#stopwords=stop_words,
+        background_color='white',
+        #colormap='',
+        max_font_size=150,
+        random_state=42)
+        wc.generate(input_text)
+        plt.figure(figsize = (8, 8), facecolor = None)
+        plt.imshow(wc)
+        plt.show()
+    single_text=convert_to_single_text()
+    wordcloud(single_text)
