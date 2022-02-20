@@ -1,0 +1,11 @@
+def remove_punctuations(input_text):
+    #this function removes punctuation from a text
+    import spacy
+    nlp=spacy.load('en_core_web_lg')
+    try:
+        doc=nlp(input_text)
+        lemmas=[token.lemma_ for token in doc if not token.is_punct]
+        output_text=' '.join(lemmas)
+        return output_text
+    except:
+        return input_text
