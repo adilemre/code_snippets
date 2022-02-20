@@ -1,0 +1,19 @@
+from textblob import TextBlob
+
+def polarity(input_text):
+    #this function calculates the polarity score and returns 0 or 1 as a flag.
+    testimonial = TextBlob(input_text)
+    polarity_score=testimonial.polarity
+    if polarity_score>0:
+        return 1
+    else:
+        return 0
+
+def subjectivity(input_text):
+    #this function calculates the subjectivity score and returns 0 or 1 as a flag.
+    testimonial = TextBlob(input_text)
+    subjectiviyt_score=testimonial.subjectivity
+    if  subjectiviyt_score >0.5:  # subjective
+        return 0
+    else:
+        return 1  #objective
