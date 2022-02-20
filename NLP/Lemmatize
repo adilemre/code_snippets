@@ -1,0 +1,14 @@
+
+def lemmatize(input_df,input_col):
+    #this function lematize a text in a dataframe column and replace it with the new text
+    import spacy
+    nlp=spacy.load('en_core_web_lg')
+    def lematize_text(input_text):
+        try:
+            doc=nlp(input_text)
+            lemmas=[token.lemma_ for token in doc]
+            output_text=' '.join(lemmas)
+            return output_text
+        except:
+            return input_text
+    input_df[input_col]=input_df[input_col].apply(lematize_text)
