@@ -1,0 +1,13 @@
+#Winsorizing
+def winsorize_features(input_df,input_lower_threshold,input_upper_threshold):
+    from scipy.stats.mstats import winsorize as winsorize
+    import pandas as pd
+    features=input_df.columns
+    input_upper_threshold=1-input_upper_threshold
+    output_df=pd.DataFrame()
+    for feature in features:
+        output_df[feature]=winsorize(input_df[feature],[input_lower_threshold,input_upper_threshold])
+    return output_df
+
+#Assigning winsorized values to a new dataframe to compare raw and winsorized values.
+New_dataframe=winsorize_features(stores,0.01,0.99)
